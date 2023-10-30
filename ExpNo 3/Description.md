@@ -1,160 +1,204 @@
-<h1>EXPERIMENT 02: Implement Breadth First Search Traversal of a Graph</h1> 
+<h1>EXPERIMENT 03 : Implement A* search algorithm for a Graph</h1> 
 <h3>Name: Keerthika N</h3>
 <h3>Register Number : 212221230049</h3>
 <H3>Aim:</H3>
-<p>To Implement Breadth First Search Traversal of a Graph using Python 3.</p>
-<h3>Theory:</h3>
-<p>Breadth-First Traversal (or Search) for a graph is like the Breadth-First Traversal of a tree.
-The only catch here is that, unlike trees, graphs may contain cycles so that we may come to the same node again. To avoid processing a node more than once, we divide the vertices into two categories:
-<ol><li>Visited</li>
-<li>Not Visited</li></ol>
-</p>
-<p>A Boolean visited array is used to mark the visited vertices. For simplicity, it is assumed that all vertices are reachable from the starting vertex. BFS uses a queue data structure for traversal.</p>
-<p><strong>How does BFS work?</strong><br>
-  Starting from the root, all the nodes at a particular level are visited first, and then the next level nodes are traversed until all the nodes are visited.
-To do this, a queue is used. All the adjacent unvisited nodes of the current level are pushed into the queue, and the current-level nodes are marked visited and popped from the queue.
-Illustration:
-Let us understand the working of the algorithm with the help of the following example.
-Step1: Initially queue and visited arrays are empty.
-</p>
+<p>To ImplementA * Search algorithm for a Graph using Python 3.</p>
 
-![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/8acdebf8-ecc2-4d10-a208-45cce441f059)
-
-
-Queue and visited arrays are empty initially.
-Step2: Push node 0 into queue and mark it visited.
-
-![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/0e9ce012-8e1f-43d7-b7b9-c0fb19fe0c3f)
-
-
-Push node 0 into queue and mark it visited.
-Step 3: Remove node 0 from the front of queue and visit the unvisited neighbours and push them into queue.
-
-![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/67d8fa3b-ce9e-46c2-9dd7-089e204e667a)
-
-Step 4: Remove node 1 from the front of queue and visit the unvisited neighbours and push them into queue.
-
-![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/b0cf0fde-8a86-41cb-a054-36875ac24ab0)
-
-Step 5: Remove node 2 from the front of queue and visit the unvisited neighbours and push them into queue.
-
-![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/8968a163-6b3a-4f7e-8ad4-bbf24f326b9b)
-
-Step 6: Remove node 3 from the front of queue and visit the unvisited neighbours and push them into queue. 
-As we can see that every neighbours of node 3 is visited, so move to the next node that are in the front of the queue.
-
-![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/7a1c1b16-ea69-497f-a099-8440200f6dc0)
-
-Steps 7: Remove node 4 from the front of queue and visit the unvisited neighbours and push them into queue. 
-As we can see that every neighbours of node 4 are visited, so move to the next node that is in the front of the queue.
-
-![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/8e16ffa3-c3d6-4774-822b-6eb84adedad9)
-
-Remove node 4 from the front of queue and visit the unvisited neighbours and push them into queue.
-Now, Queue becomes empty, So, terminate these process of iteration.
-
-
-<hr>
-<h2>Algorithm:</h2>
-<hr>
-<ol>
-  <li>Construct a Graph with Nodes and Edges</li>
- <li>Breadth First Uses Queue and iterates through the Queue for Traversal.</li>
-  <li>Insert a Start Node into the Queue.</li>
-<li>Find its Successors Or neighbors and Check whether the node is visited or not.</li>
-<li>If Not Visited, add it to the Queue. Else Continue.</li>
-<li>Iterate steps 4 and 5 until all nodes get visited, and there are no more unvisited nodes.</li>
-
-</ol>
+### Algorithm:
+A* Search Algorithm
+1. Initialize the open list
+2. Initialize the closed list  
+   put the starting node on the open     
+   list (you can leave its f at zero)
+3. while the open list is not empty  
+   a) find the node with the least f on the open list, call it "q"  
+   b) pop q off the open list  
+   c) generate q's 8 successors and set their parents to q  
+   d) for each successor  
+        i) if successor is the goal, stop search  
+        ii) else, compute both g and h for successor  
+          successor.g = q.g + distance between successor and q  
+          successor.h = distance from goal to successor (This can be done using many ways, we will discuss three heuristics- Manhattan, Diagonal and Euclidean Heuristics)  
+          successor.f = successor.g + successor.h  
+        iii) if a node with the same position as successor is in the OPEN list which has a lower f than successor, skip this successor  
+        iv) if a node with the same position as successor  is in the CLOSED list which has a lower f than successor, skip this successor  
+            otherwise, add  the node to the open listend (for loop)  
+  e) push q on the closed list  
+   end (while loop)  
 
 ## Program:
 ```
-from collections import deque
 from collections import defaultdict
+H_dist ={}
+def aStarAlgo(start_node, stop_node):
+    open_set = set(start_node)
+    closed_set = set()
+    g = {}               #store distance from starting node
+    parents = {}         # parents contains an adjacency map of all nodes
+    #distance of starting node from itself is zero
+    g[start_node] = 0
+    #start_node is root node i.e it has no parent nodes
+    #so start_node is set to its own parent node
+    parents[start_node] = start_node
+    while len(open_set) > 0:
+        n = None
+        #node with lowest f() is found
+        for v in open_set:
+            if n == None or g[v] + heuristic(v) < g[n] + heuristic(n):
+                n = v
+        if n == stop_node or Graph_nodes[n] == None:
+            pass
+        else:
+            for (m, weight) in get_neighbors(n):
+                #nodes 'm' not in first and last set are added to first
+                #n is set its parent
+                if m not in open_set and m not in closed_set:
+                    open_set.add(m)
+                    parents[m] = n
+                    g[m] = g[n] + weight
+                #for each node m,compare its distance from start i.e g(m) to the
+                #from start through n node
+                else:
+                    if g[m] > g[n] + weight:
+                        #update g(m)
+                        g[m] = g[n] + weight
+                        #change parent of m to n
+                        parents[m] = n
+                        #if m in closed set,remove and add to open
+                        if m in closed_set:
+                            closed_set.remove(m)
+                            open_set.add(m)
+        if n == None:
+            print('Path does not exist!')
+            return None
+        
+        # if the current node is the stop_node
+        # then we begin reconstructin the path from it to the start_node
+        if n == stop_node:
+            path = []
+            while parents[n] != n:
+                path.append(n)
+                n = parents[n]
+            path.append(start_node)
+            path.reverse()
+            print('Path found: {}'.format(path))
+            return path
+        # remove n from the open_list, and add it to closed_list
+        # because all of his neighbors were inspected
+        open_set.remove(n)
+        closed_set.add(n)
+    print('Path does not exist!')
+    return None
+
+#define fuction to return neighbor and its distance
+#from the passed node
+def get_neighbors(v):
+    if v in Graph_nodes:
+        return Graph_nodes[v]
+    else:
+        return None
+def heuristic(n):
+    return H_dist[n]
 
 
+#Describe your graph here
+'''Graph_nodes = {
+    'A': [('B', 6), ('F', 3)],
+    'B': [('A', 6), ('C', 3), ('D', 2)],
+    'C': [('B', 3), ('D', 1), ('E', 5)],
+    'D': [('B', 2), ('C', 1), ('E', 8)],
+    'E': [('C', 5), ('D', 8), ('I', 5), ('J', 5)],
+    'F': [('A', 3), ('G', 1), ('H', 7)],
+    'G': [('F', 1), ('I', 3)],
+    'H': [('F', 7), ('I', 2)],
+    'I': [('E', 5), ('G', 3), ('H', 2), ('J', 3)],
+}
 '''
-V E
-FOR EVERY EDGE
-U V
-7 9
-A B
-A C 
-A F
-C E
-C F
-C D
-D E 
-D G
-G F
-'''
-def bfs(graph,start,visited,path):
-    queue = deque()
-    path.append(start)
-    queue.append(start)
-    visited[start] = True
-    while len(queue) != 0:
-        tmpnode = queue.popleft()
-        for neighbour in graph[tmpnode]:
-            if visited[neighbour] == False:
-                path.append(neighbour)
-                queue.append(neighbour)
-                visited[neighbour] = True
-    return path
-
 graph = defaultdict(list)
-v,e = map(int,input().split())
+n,e = map(int,input().split())
 for i in range(e):
-    u,v = map(str,input().split())
-    graph[u].append(v)
-    graph[v].append(u)
+    u,v,cost = map(str,input().split())
+    t=(v,float(cost))
+    graph[u].append(t)
+    t1=(u,float(cost))
+    graph[v].append(t1)
+for i in range(n):
+    node,h=map(str,input().split())
+    H_dist[node]=float(h)
+print(H_dist)
 
-start = '0'
-path = []
-visited = defaultdict(bool)
-traversedpath = bfs(graph,start,visited,path)
-print(traversedpath)
+   
+Graph_nodes=graph
+print(graph)
+aStarAlgo('S', 'G')
+
 ```
-<h3>Sample Input</h3>
-<hr>
-7 9 <BR>
-A B <BR>
-A C <BR>
-A F <BR>
-C E <BR>
-C F <BR>
-C D <BR>
-D E <BR>
-D G <BR>
-G F <BR>
-<hr>
-<h3>Sample Output</h3>
-<hr>
-['A', 'B', 'C', 'F', 'E', 'D', 'G']
-
+<h2>Sample Graph I</h2>
 <hr>
 
+![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/b1377c3f-011a-4c0f-a843-516842ae056a)
+
 <hr>
-<h3>Sample Input</h3>
+<h2>Sample Input</h2>
 <hr>
-5 6 <BR>
-0 1 <BR>
-0 2 <BR>
-1 2 <BR>
-1 3 <BR>
-2 4 <BR>
-3 4 <BR>
+10 14 <br>
+A B 6 <br>
+A F 3 <br>
+B D 2 <br>
+B C 3 <br>
+C D 1 <br>
+C E 5 <br>
+D E 8 <br>
+E I 5 <br>
+E J 5 <br>
+F G 1 <br>
+G I 3 <br>
+I J 3 <br>
+F H 7 <br>
+I H 2 <br>
+A 10 <br>
+B 8 <br>
+C 5 <br>
+D 7 <br>
+E 3 <br>
+F 6 <br>
+G 5 <br>
+H 3 <br>
+I 1 <br>
+J 0 <br>
 <hr>
-<h3>Sample Output</h3>
+<h2>Sample Output</h2>
 <hr>
-['0', '1', '2', '3', '4']
-<hr>
-<h3>Result:</h3>
-<hr>
-<p>Thus,a Graph was constructed and implementation of Breadth First Search for the same graph was done successfully.</p>
+Path found: ['A', 'F', 'G', 'I', 'J']
 
 
+<hr>
+<h2>Sample Graph II</h2>
+<hr>
+
+![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/acbb09cb-ed39-48e5-a59b-2f8d61b978a3)
 
 
+<hr>
+<h2>Sample Input</h2>
+<hr>
+6 6 <br>
+A B 2 <br>
+B C 1 <br>
+A E 3 <br>
+B G 9 <br>
+E D 6 <br>
+D G 1 <br>
+A 11 <br>
+B 6 <br>
+C 99 <br>
+E 7 <br>
+D 1 <br>
+G 0 <br>
+<hr>
+<h2>Sample Output</h2>
+<hr>
+Path found: ['A', 'E', 'D', 'G']
 
-
+<h2>Result</h2>
+Thus, A Start Search Algorithm is implemented succesfully using python.
