@@ -4,7 +4,7 @@
 
 
 ## Aim:
-    To solve  Wumpus World Problem using Python demonstrating Inferences from Propositional Logic
+To solve  Wumpus World Problem using Python demonstrating Inferences from Propositional Logic
 ## Problem Description:
 <hr>
 Wumpus World
